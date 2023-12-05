@@ -1,0 +1,86 @@
+/* .grid-container { */
+/*   display: grid; */
+/*   grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%; */
+/*   aspect-ratio: .5; */
+/*   gap: 1px; */
+/*   width: 20%; */
+/* } */
+/**/
+/* .grid-cell { */
+/*   background-color: #ddd; */
+/* } */
+/**/
+/* .alive { */
+/*   background-color: #555; */
+/* } */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: monospace;
+ }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(100, 1fr);
+  aspect-ratio: 1;
+  gap: 1px;
+  max-height: 90vh;
+  margin: auto;
+}
+
+.grid-cell {
+  background-color: #ddd;
+}
+
+.alive {
+  background-color: #555;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  /* padding: 1rem 0 1rem 10vw; */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  border-bottom: 1px solid #aaa;
+  height: 8vh;
+  margin-bottom: 1vh
+}
+
+.controls button {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  padding: 0.3rem;
+  font-size: 1.3rem;
+  margin-right: 1rem;
+  text-decoration: underline;
+  width: 6ch;
+  text-align: center;
+}
+
+.controls button:hover {
+  background-color: #ddd;
+} 
+
+.controls button:active {
+  background-color: #555;
+}
+
+.controls span {
+  border: 1px solid #ddd;
+  padding: 0.3rem;
+  font-size: 1.3rem;
+}
+
+.controls .display {
+  width: 9ch;
+  text-align: right;
+}
+
