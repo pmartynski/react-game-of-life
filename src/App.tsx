@@ -24,7 +24,7 @@ function App() {
         <BoardContext.Provider value={boardState}>
           <div className="controls">
             <button id="start">Start</button>
-            <button id="rand">Rand</button>
+            <button onClick={() => setBoardState(randomizeCells)}>Rand</button>
             <span className="label">Ticks:</span>
             <span className="display" id="ticks">0</span>
             <span className="label">Alive:</span>
