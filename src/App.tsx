@@ -1,22 +1,25 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useState } from 'react'
 import './App.css'
 import Board from './components/Board'
 
-type BoardState = boolean[];
+type BoardState = {
+  cells?: boolean[];
+  onClick?: (index: number) => void;
+}
 
-export const BoardContext = createContext<BoardState>([])
+export const BoardContext = createContext<BoardState>({})
 
-function randomizeCells() : BoardState {
+function randomizeCells() : boolean[] {
   const boardState = cleanCells()
-  for(var i = 0; i < boardState.length; ++i) {
+  for(let i = 0; i < (boardState.length ?? 0); ++i) {
     boardState[i] = Math.random() > 0.66;
   }
 
   return boardState;
 }
 
-function cleanCells() : BoardState {
-  return [...Array(10_000).map(_ => false)];
+function cleanCells() : boolean[] {
+  return [...Array(10_000).map(() => false)];
 }
 
 function getNeighbours(i: number): number[] {
@@ -67,7 +70,7 @@ function getNeighbours(i: number): number[] {
   return result;
 }
 
-function iterateState(boardState: BoardState) : BoardState {
+function iterateState(boardState: boolean[]) : boolean[] {
   const newState = boardState.slice(0);
 
   for (let i = 0; i < boardState.length; ++i) {
@@ -96,28 +99,28 @@ function iterateState(boardState: BoardState) : BoardState {
 }
 
 function App() {
-  const [boardState, setBoardState] = useState(cleanCells());
+  const [cells, setCells] = useState(cleanCells());
   
   const toggleCell = (index: number) => {
-    const newState = boardState.slice(0);
+    const newState = cells.slice(0);
     newState[index] = !newState[index];
-    setBoardState(newState);
-  }
+    setCells(newState);
+  };
 
   return (
     <>
       <div>
-        <BoardContext.Provider value={boardState}>
+        <BoardContext.Provider value={{ cells, onClick: toggleCell}}>
           <div className="controls">
-            <button onClick={() => setBoardState(iterateState(boardState))}>Start</button>
-            <button onClick={() => setBoardState(randomizeCells())}>Rand</button>
-            <button onClick={() => setBoardState(cleanCells)}>Clean</button>
+            <button onClick={() => setCells(iterateState(cells))}>Start</button>
+            <button onClick={() => setCells(randomizeCells())}>Rand</button>
+            <button onClick={() => setCells(cleanCells)}>Clean</button>
             <span className="label">Ticks:</span>
             <span className="display" id="ticks">0</span>
             <span className="label">Alive:</span>
             <span className="display" id="alive">0</span>
           </div>
-          <Board onClick={toggleCell} />
+          <Board />
         </BoardContext.Provider>
       </div>
     </>
