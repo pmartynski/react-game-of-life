@@ -4,14 +4,16 @@ import { BoardContext } from "../App";
 
 type Params = {
     index: number;
+    onClick: (index: number) => void 
 }
 
 function Cell({
     index,
+    onClick
 }: Params) {
     const cells = useContext(BoardContext);
     const className = (cells[index] ? 'alive ' : '') + 'grid-cell'
-    return <div className={className} />
+    return <div onClick={() => onClick(index)} className={className} />
 }
 
 export default Cell
