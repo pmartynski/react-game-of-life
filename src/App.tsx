@@ -12,7 +12,7 @@ export const BoardContext = createContext<BoardState>({})
 function randomizeCells() : boolean[] {
   const boardState = cleanCells()
   for(let i = 0; i < (boardState.length ?? 0); ++i) {
-    boardState[i] = Math.random() > 0.66;
+    boardState[i] = Math.random() > 0.60;
   }
 
   return boardState;
@@ -100,22 +100,23 @@ function iterateState(boardState: boolean[]) : boolean[] {
 
 function App() {
   const cells = useRef(cleanCells());
-  const [updateTrigger, setUpdateTrigger] = useState(false);
+  const [, setForceUpdate] = useState(false);
   const [running, setRunning] = useState(false);
   const [tickCount, setTickCount] = useState(0);
 
   useEffect(() => {
     if(running) {
-      const timer = setTimeout(() => {
+      const interval = setInterval(() => {
         cells.current = iterateState(cells.current);
-        setTickCount(tickCount + 1);
+        setTickCount(tickCount => tickCount + 1);
       }, 1);
-      return () => clearTimeout(timer);
+      return () => clearInterval(interval);
     }
     return undefined;
-  }, [running, tickCount])
+  }, [running])
   
   const toggleCell = (index: number) => {
+    setForceUpdate(v => !v);
     cells.current[index] = !cells.current[index];
   };
 
@@ -124,7 +125,8 @@ function App() {
       return;
     }
 
-    setUpdateTrigger(!updateTrigger);
+    setForceUpdate(v => !v);
+    setTickCount(0);
     cells.current = randomizeCells();
   }
 
@@ -133,15 +135,12 @@ function App() {
       return;
     }
 
-    setUpdateTrigger(!updateTrigger);
+    setForceUpdate(v => !v);
+    setTickCount(0);
     cells.current = cleanCells();
   }
 
   const handleStartStop = () => {
-    if(running) {
-      setTickCount(0);
-    }
-  
     setRunning(!running);
   }
 
@@ -154,9 +153,9 @@ function App() {
             <button onClick={handleRand}>Rand</button>
             <button onClick={handleClean}>Clean</button>
             <span className="label">Ticks:</span>
-            <span className="display" id="ticks">{tickCount}</span>
+            <span className="display">{tickCount}</span>
             <span className="label">Alive:</span>
-            <span className="display" id="alive">{cells.current.filter(c => c).length}</span>
+            <span className="display">{cells.current.filter(c => c).length}</span>
           </div>
           <Board />
         </BoardContext.Provider>
